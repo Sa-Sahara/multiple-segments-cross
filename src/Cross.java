@@ -1,7 +1,7 @@
 public class Cross {
-    Cross (Point otherP, boolean otherOk) {
-        this.p = new Point(otherP);
-        this.ok = otherOk;
+    Cross (Point iP, boolean iOk) {
+        this.p = new Point(iP);
+        this.ok = iOk;
     }
 
     Point p;

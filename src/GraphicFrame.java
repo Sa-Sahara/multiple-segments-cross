@@ -12,7 +12,7 @@ public class GraphicFrame extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setPreferredSize(new Dimension(screenSize));
-        this.setTitle("Графическое изображение отрезков");
+        this.setTitle("Segments");
         mContentPanel = new JPanel(new GridBagLayout());
         mContentPanel.setBackground(Color.black);
 

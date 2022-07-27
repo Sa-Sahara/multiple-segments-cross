@@ -1,14 +1,14 @@
 public class Point {
-    float mX;
-    float mY;
+    float x;
+    float y;
 
     Point (float iX, float iY) {
-        this.mX = iX;
-        this.mY = iY;
+        this.x = iX;
+        this.y = iY;
     }
 
     Point (Point other) {
-        this.mX = other.mX;
-        this.mY = other.mY;
+        this.x = other.x;
+        this.y = other.y;
     }
 }

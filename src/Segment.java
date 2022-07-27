@@ -6,8 +6,8 @@ public class Segment {
     public float length(Segment iSegm) {
         return
                 (float) Math.sqrt(
-                        Math.pow(iSegm.mP0.mX - iSegm.mP1.mX, 2) +
-                        Math.pow(iSegm.mP0.mY - iSegm.mP1.mY, 2));
+                        Math.pow(iSegm.mP0.x - iSegm.mP1.x, 2) +
+                        Math.pow(iSegm.mP0.y - iSegm.mP1.y, 2));
     }
 
     public Segment(Point iP0, Point iP1) {
@@ -25,9 +25,9 @@ public class Segment {
     }
 
     public void computeABC() {
-        mA = -(mP1.mY - mP0.mY);
-        mB = (mP1.mX - mP0.mX);
-        mC = ((mP1.mY - mP0.mY) * mP0.mX - (mP1.mX - mP0.mX) * mP0.mY);
+        mA = -(mP1.y - mP0.y);
+        mB = (mP1.x - mP0.x);
+        mC = ((mP1.y - mP0.y) * mP0.x - (mP1.x - mP0.x) * mP0.y);
     }
 
     public Point getP0() {

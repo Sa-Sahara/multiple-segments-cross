@@ -3,36 +3,31 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class GraphicPanel extends JPanel {
-    ArrayList<Segment> mSegments;
+    ArrayList<Segment> mSegments = new ArrayList<>();
 
     GraphicPanel(ArrayList<Segment> iSegments) {
-        mSegments = iSegments;
+        mSegments.addAll(iSegments); //тут число отрезков верное
+
         this.setBackground(Color.gray);
         this.setPreferredSize(new Dimension(Collisions.windowWidth,Collisions.windowHeight));
         this.setLayout(new BorderLayout());
-        //int l = iSegm.size(); TODO: графики длины отрезков
+        //int l = iSegm.size(); TODO: segments length diadram
 
     }
-    @Override
-    protected void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
 
         for (Segment s : mSegments) {
-            System.out.println("paintComponent " + s.getP0().mX + " " + s.getP0().mY + " " + s.getP1().mX + " " + s.getP1().mY);
-        }
-
-        /*for (Segment s : mSegments) {
-            if (s.getP0().mX == s.getP1().mX) {
+            if (s.getP0().x == s.getP1().x) {
                 g2D.setPaint(Color.red);
-            } else if (s.getP0().mY == s.getP1().mY) {
+            } else if (s.getP0().y == s.getP1().y) {
                 g2D.setPaint(Color.green);
             } else {
                 g2D.setPaint(Color.orange);
             }
-            System.out.println("paintComponent " + s.getP0().mX + " " + s.getP0().mY + " " + s.getP1().mX + " " + s.getP1().mY);
-            g2D.drawLine((int) s.getP0().mX, (int) s.getP0().mY, (int) s.getP1().mX, (int) s.getP1().mY);
-            //new GUISegment(s).paint(g2D);
-        }*/
+
+            g2D.drawLine((int) s.getP0().x, (int) s.getP0().y, (int) s.getP1().x, (int) s.getP1().y);
+        }
     }
 }

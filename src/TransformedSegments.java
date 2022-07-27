@@ -1,11 +1,8 @@
 import java.util.ArrayList;
 
 public class TransformedSegments {
-    //ArrayList<Segment> mSegments = new ArrayList<>();
 
     public ArrayList<Segment> transformForPainting (ArrayList<Segment> iSegments) {
-
-        //mSegments.addAll(iSegments);
 
         ArrayList<Segment> transSegm = new ArrayList<>();
         Box factSegmentsBorders = calculateBoarders(iSegments);
@@ -13,24 +10,23 @@ public class TransformedSegments {
 
         for (Segment s : iSegments) {
             Segment trS = fitSegment(s, factSegmentsBorders);
-            //System.out.println("fitted "+ trS.getP0().mX+" "+trS.getP0().mY+" "+trS.getP1().mX+ " "+ trS.getP1().mY); //тут корректно
             transSegm.add(trS);
         }
         return transSegm;
     }
 
     private Box calculateBoarders (ArrayList<Segment> iSegments) { //корректно
-        float minX = iSegments.get(0).getP0().mX;
-        float maxX = iSegments.get(0).getP0().mX;
-        float minY = iSegments.get(0).getP0().mY;
-        float maxY = iSegments.get(0).getP0().mY;
+        float minX = iSegments.get(0).getP0().x;
+        float maxX = iSegments.get(0).getP0().x;
+        float minY = iSegments.get(0).getP0().y;
+        float maxY = iSegments.get(0).getP0().y;
 
         for (Segment s : iSegments) {
             for(int i = 0; i < 2; i++) {
-                if (s.getP(i).mX < minX) {minX = s.getP(i).mX;}
-                if (s.getP(i).mX > maxX) {maxX = s.getP(i).mX;}
-                if (s.getP(i).mY < minY) {minY = s.getP(i).mY;}
-                if (s.getP(i).mY > maxY) {maxY = s.getP(i).mY;}
+                if (s.getP(i).x < minX) {minX = s.getP(i).x;}
+                if (s.getP(i).x > maxX) {maxX = s.getP(i).x;}
+                if (s.getP(i).y < minY) {minY = s.getP(i).y;}
+                if (s.getP(i).y > maxY) {maxY = s.getP(i).y;}
             }
         }
         return new Box(minX, minY, maxX, maxY);
@@ -43,27 +39,25 @@ public class TransformedSegments {
         float shiftHeight = shiftHeight(iBox);
 
         Segment s = new Segment(
-                new Point(iSegm.getP0().mX  + shiftWidth,//ok
-                        iSegm.getP0().mY  + shiftHeight), //ok
-                new Point(iSegm.getP1().mX  + shiftWidth, //ok
-                        iSegm.getP1().mY  + shiftHeight)); //ok
+                new Point(iSegm.getP0().x + shiftWidth,
+                        iSegm.getP0().y + shiftHeight),
+                new Point(iSegm.getP1().x + shiftWidth,
+                        iSegm.getP1().y + shiftHeight));
 
-        //System.out.println("fitSegment " + s.getP1().mX + " " + s.getP1().mY);
         return s;
     }
 
     private float shiftWidth (Box iBox) {
-        //System.out.println("shiftWidth "+ (0f - iBox.getPMin().mX)); // тут ок
-        return 0f - iBox.getPMin().mX;
+        return 0f - iBox.getPMin().x;
     }
 
     private float shiftHeight (Box iBox) {
         //System.out.println("shiftHeight" + (0f - iBox.getPMin().mY)); //тут ок
-        return 0f - iBox.getPMin().mY;
+        return 0f - iBox.getPMin().y;
     }
 
     /*
-    private float findRateWidth (Box iBox) { // todo раст€гивание-сжатие
+    private float findRateWidth (Box iBox) { //
         float rateWidth = Collisions.windowWidth / Math.abs(iBox.getPMax().mX - iBox.getPMin().mX);
         System.out.println("rateWidth " +rateWidth);
         return rateWidth;
