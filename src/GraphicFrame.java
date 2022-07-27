@@ -5,8 +5,10 @@ import java.util.ArrayList;
 public class GraphicFrame extends JFrame {
     JPanel mContentPanel;
     GraphicPanel mGraphicPanel;
+    ArrayList<Segment> mSegments;
 
     GraphicFrame(ArrayList<Segment> iSegments){
+        mSegments = iSegments;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setPreferredSize(new Dimension(screenSize));
@@ -15,8 +17,6 @@ public class GraphicFrame extends JFrame {
         mContentPanel.setBackground(Color.black);
 
         mGraphicPanel = new GraphicPanel(iSegments);
-        //mGraphicPanel.paintSegments(Graphics2D g, iSegments);
-
         mContentPanel.add(mGraphicPanel, new GridBagConstraints(0, 0, 1, 1,
                 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
@@ -27,6 +27,4 @@ public class GraphicFrame extends JFrame {
         this.setVisible(true);
     }
 }
-/*вариант расширения окна:
-this.setExtendedState(Frame.MAXIMIZED_BOTH);
- */
+

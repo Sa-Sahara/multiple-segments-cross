@@ -1,18 +1,20 @@
 import java.util.ArrayList;
 
 public class CrossSearch {
+    ArrayList<Segment> mSegments = new ArrayList<>();
 
     public int numOfCrosses(ArrayList<Segment> iSegments) {
+        mSegments.addAll(iSegments);
         int numOfCrosses = 0;
-        int l = iSegments.size();
+        int l = mSegments.size();
         while (l > 1) {
             for (int i = 1; i < l; i++) {
-                if (isCrossing(iSegments.get(0), iSegments.get(i))) {
+                if (isCrossing(mSegments.get(0), mSegments.get(i))) {
                     numOfCrosses++;
                 }
             }
-            iSegments.remove(0);
-            l = iSegments.size();
+            mSegments.remove(0);
+            l = mSegments.size();
         }
         return numOfCrosses;
     }
@@ -35,6 +37,7 @@ public class CrossSearch {
                 denominator;
         return new Point(x,y);
     }
+
     private boolean betweenLinePoints (Point center, Segment s) {
         return betweenPoints(center, s.getP0(), s.getP1());
     }
@@ -44,6 +47,7 @@ public class CrossSearch {
                 iCenter.mY >= Math.min(iP0.mY, iP1.mY) &&
                 iCenter.mY <= Math.max(iP0.mY, iP1.mY);
     }
+
     private Cross caseMultipleCross(Segment iLine1, Segment iLine2) {
         Point p = new Point(0, 0);
         boolean bool = false;

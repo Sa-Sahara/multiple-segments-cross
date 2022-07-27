@@ -1,4 +1,3 @@
-import java.util.*;
 public class Segment {
     private Point mP0;
     private Point mP1;
