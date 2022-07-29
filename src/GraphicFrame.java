@@ -7,7 +7,7 @@ public class GraphicFrame extends JFrame {
     GraphicPanel mGraphicPanel;
     ArrayList<Segment> mSegments;
 
-    GraphicFrame(ArrayList<Segment> iSegments){
+    GraphicFrame(ArrayList<Segment> iSegments, int windowWidth, int windowHeight){
         mSegments = iSegments;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -16,7 +16,7 @@ public class GraphicFrame extends JFrame {
         mContentPanel = new JPanel(new GridBagLayout());
         mContentPanel.setBackground(Color.black);
 
-        mGraphicPanel = new GraphicPanel(iSegments);
+        mGraphicPanel = new GraphicPanel(iSegments, windowWidth, windowHeight);
         mContentPanel.add(mGraphicPanel, new GridBagConstraints(0, 0, 1, 1,
                 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,

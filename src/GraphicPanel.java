@@ -5,11 +5,11 @@ import java.util.ArrayList;
 public class GraphicPanel extends JPanel {
     ArrayList<Segment> mSegments = new ArrayList<>();
 
-    GraphicPanel(ArrayList<Segment> iSegments) {
-        mSegments.addAll(iSegments); //тут число отрезков верное
+    GraphicPanel(ArrayList<Segment> iSegments, int windowWidth, int windowHeight) {
+        mSegments.addAll(iSegments);
 
         this.setBackground(Color.gray);
-        this.setPreferredSize(new Dimension(Collisions.windowWidth,Collisions.windowHeight));
+        this.setPreferredSize(new Dimension(windowWidth,windowHeight));
         this.setLayout(new BorderLayout());
         //int l = iSegm.size(); TODO: segments length diadram
 
@@ -26,7 +26,6 @@ public class GraphicPanel extends JPanel {
             } else {
                 g2D.setPaint(Color.orange);
             }
-
             g2D.drawLine((int) s.getP0().x, (int) s.getP0().y, (int) s.getP1().x, (int) s.getP1().y);
         }
     }

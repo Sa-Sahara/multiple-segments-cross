@@ -3,48 +3,69 @@ import java.util.Random;
 
 public class Collisions {
 
-    static float mMinX = -500f;
-    static float mMinY = -50f;
-    static float mMaxX = 300f;
-    static float mMaxY = 900f;
-    private static Box mInputLimitBox = new Box(mMinX, mMinY, mMaxX, mMaxY);
-    private static Random random;
-
-    static int windowWidth = 500;
-    static int windowHeight = 500;
-
-    static int numOfSegments = 10;
-
     public static void main(String[] args) {
-        random = new Random();
-        long seed = 100;
-        ArrayList<Segment> mSegments = segmentsInBox(numOfSegments, mInputLimitBox);
+
+        float minX = -500f;
+        float minY = -50f;
+        float maxX = 300f;
+        float maxY = 900f;
+        Box mInputLimitBox = new Box(minX, minY, maxX, maxY);
+
+        Random random = new Random();
+        /*long seed = 100;
+        random.setSeed(seed);*/
+
+        int windowWidth = 500;
+        int windowHeight = 500;
+
+        int numOfSegments = 3;
+
+        ArrayList<Segment> mSegments = segmentsInBox(numOfSegments, mInputLimitBox, random);
 
         CrossMode mMode = CrossMode.MULTIPLE;
         CrossSearch alg = new CrossSearch(mMode);
         int numOfCrosses = alg.numOfCrosses(mSegments);
         System.out.println("Total amount of crosses: " + numOfCrosses);
 
-        TransformedSegments algFitting = new TransformedSegments();
-        ArrayList<Segment> fitSegments = algFitting.transformForPainting(mSegments);
+        coordsTransform xFitting = new coordsTransform(new float[]{minX, maxX}, new float[]{0, windowWidth});
+        coordsTransform yFitting = new coordsTransform(new float[]{minY, maxY}, new float[]{0, windowHeight});
+        ArrayList<Segment> GUISegments = fitSegments(mSegments, xFitting, yFitting);
 
-        new GraphicFrame (fitSegments);
+        new GraphicFrame (GUISegments, windowWidth, windowHeight);
     }
 
-    private static ArrayList<Segment> segmentsInBox(int iNumOfSegments, Box iBox) {
+    private static Point fitPoint (Point p, coordsTransform transformX, coordsTransform transformY) {
+        return new Point(transformX.fit(p.x), transformY.fit(p.y));
+    }
+
+    private static Segment fitSegment (Segment iSegment, coordsTransform transX, coordsTransform transY) {
+        return new Segment(fitPoint(iSegment.getP0(), transX, transY),
+                            fitPoint(iSegment.getP1(), transX, transY));
+    }
+
+    private static ArrayList<Segment> fitSegments(ArrayList<Segment> iSegments,
+                                                  coordsTransform transformX,
+                                                  coordsTransform transformY) {
+        ArrayList<Segment> fitted = new ArrayList<>();
+        for(Segment s : iSegments){
+            fitted.add(fitSegment(s, transformX, transformY));
+        }
+        return fitted;
+    }
+
+    private static ArrayList<Segment> segmentsInBox(int iNumOfSegments, Box iBox, Random r) {
         ArrayList<Segment> segments = new ArrayList<>();
         for (int i = 0; i < iNumOfSegments; i++) {
-            Segment s = new Segment(pointInBox(iBox), pointInBox(iBox));
-            System.out.println(""+ s.getP0().x +" "+s.getP0().y +" "+s.getP1().x + " "+ s.getP1().y);
+            Segment s = new Segment(pointInBox(r, iBox), pointInBox(r, iBox));
             segments.add(s);
         }
         return segments;
     }
 
-    private static Point pointInBox(Box iBox) {
-        float x = random.nextFloat()*
+    private static Point pointInBox(Random r, Box iBox) {
+        float x = r.nextFloat()*
                 (iBox.getPMax().x - iBox.getPMin().x) + iBox.getPMin().x;
-        float y = new Random().nextFloat()*
+        float y = r.nextFloat()*
                 (iBox.getPMax().y - iBox.getPMin().y) + iBox.getPMin().y;
         return new Point(x, y);
     }
