@@ -1,3 +1,7 @@
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -18,7 +22,7 @@ public class Collisions {
         int windowWidth = 500;
         int windowHeight = 500;
 
-        int numOfSegments = 3;
+        int numOfSegments = 100;
 
         ArrayList<Segment> mSegments = segmentsInBox(numOfSegments, mInputLimitBox, random);
 
@@ -29,24 +33,25 @@ public class Collisions {
 
         coordsTransform xFitting = new coordsTransform(new float[]{minX, maxX}, new float[]{0, windowWidth});
         coordsTransform yFitting = new coordsTransform(new float[]{minY, maxY}, new float[]{0, windowHeight});
-        ArrayList<Segment> GUISegments = fitSegments(mSegments, xFitting, yFitting);
+        ArrayList<GUISegment> GUISegments = fitSegments(mSegments, xFitting, yFitting);
 
-        new GraphicFrame (GUISegments, windowWidth, windowHeight);
+        //new GraphicFrameChart(GUISegments, windowWidth, windowHeight);
+        new GraphicFrameBar(mSegments);
     }
 
     private static Point fitPoint (Point p, coordsTransform transformX, coordsTransform transformY) {
         return new Point(transformX.fit(p.x), transformY.fit(p.y));
     }
 
-    private static Segment fitSegment (Segment iSegment, coordsTransform transX, coordsTransform transY) {
-        return new Segment(fitPoint(iSegment.getP0(), transX, transY),
+    private static GUISegment fitSegment (Segment iSegment, coordsTransform transX, coordsTransform transY) {
+        return new GUISegment(fitPoint(iSegment.getP0(), transX, transY),
                             fitPoint(iSegment.getP1(), transX, transY));
     }
 
-    private static ArrayList<Segment> fitSegments(ArrayList<Segment> iSegments,
+    private static ArrayList<GUISegment> fitSegments(ArrayList<Segment> iSegments,
                                                   coordsTransform transformX,
                                                   coordsTransform transformY) {
-        ArrayList<Segment> fitted = new ArrayList<>();
+        ArrayList<GUISegment> fitted = new ArrayList<>();
         for(Segment s : iSegments){
             fitted.add(fitSegment(s, transformX, transformY));
         }

@@ -3,7 +3,7 @@ public class Segment {
     private Point mP1;
     private float mA, mB, mC;
 
-    public float length(Segment iSegm) {
+    public static float length(Segment iSegm) {
         return
                 (float) Math.sqrt(
                         Math.pow(iSegm.mP0.x - iSegm.mP1.x, 2) +

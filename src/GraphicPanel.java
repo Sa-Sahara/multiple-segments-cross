@@ -1,11 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
+
 import java.util.ArrayList;
 
 public class GraphicPanel extends JPanel {
-    ArrayList<Segment> mSegments = new ArrayList<>();
+    ArrayList<GUISegment> mSegments = new ArrayList<>();
 
-    GraphicPanel(ArrayList<Segment> iSegments, int windowWidth, int windowHeight) {
+    GraphicPanel(ArrayList<GUISegment> iSegments, int windowWidth, int windowHeight) {
         mSegments.addAll(iSegments);
 
         this.setBackground(Color.gray);
@@ -13,12 +14,14 @@ public class GraphicPanel extends JPanel {
         this.setLayout(new BorderLayout());
         //int l = iSegm.size(); TODO: segments length diadram
 
+
+
     }
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
 
-        for (Segment s : mSegments) {
+        for (GUISegment s : mSegments) {
             if (s.getP0().x == s.getP1().x) {
                 g2D.setPaint(Color.red);
             } else if (s.getP0().y == s.getP1().y) {
