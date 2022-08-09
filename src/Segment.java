@@ -4,19 +4,20 @@ public class Segment {
     private float mA, mB, mC;
 
     public static float length(Segment iSegm) {
-        return
-                (float) Math.sqrt(
-                        Math.pow(iSegm.mP0.x - iSegm.mP1.x, 2) +
-                        Math.pow(iSegm.mP0.y - iSegm.mP1.y, 2));
+        return distance2Points (iSegm.mP0, iSegm.mP1);
+    }
+
+    private static float distance2Points(Point p0, Point p1) {
+        return (float) Math.sqrt(
+                Math.pow(p0.x - p1.x, 2) +
+                        Math.pow(p0.y - p1.y, 2));
     }
 
     public Segment(Point iP0, Point iP1) {
         setP(iP0, iP1);
     }
 
-    public Segment(Segment other) {
-        this(other.getP0(), other.getP1());
-    }
+    //public Segment(Segment other) {this(other.getP0(), other.getP1());} was not used
 
     public void setP(Point iP0, Point iP1) {
         this.mP0 = new Point(iP0);

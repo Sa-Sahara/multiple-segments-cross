@@ -12,9 +12,6 @@ public class GraphicPanel extends JPanel {
         this.setBackground(Color.gray);
         this.setPreferredSize(new Dimension(windowWidth,windowHeight));
         this.setLayout(new BorderLayout());
-        //int l = iSegm.size(); TODO: segments length diadram
-
-
 
     }
     public void paintComponent(Graphics g) {

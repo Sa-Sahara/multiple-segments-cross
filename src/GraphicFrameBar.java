@@ -7,9 +7,8 @@ import java.util.ArrayList;
 public class GraphicFrameBar extends JFrame {
     JPanel mContentPanel;
 
-
     public GraphicFrameBar(ArrayList<Segment> iSegments) {
-        //System.out.println(iSegments.size());
+
         ArrayList<Segment> mSegments = new ArrayList<>();
         mSegments.addAll(iSegments);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
