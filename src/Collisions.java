@@ -14,7 +14,7 @@ public class Collisions {
         int windowWidth = 500;
         int windowHeight = 500;
 
-        int numOfSegments = 1;
+        int numOfSegments = 4;
 
         ArrayList<Segment> mSegments = segmentsInBox(numOfSegments, mInputLimitBox); //random! verb
 
@@ -54,16 +54,18 @@ public class Collisions {
         Random r = new Random();
         ArrayList<Segment> segments = new ArrayList<>();
 
+
         for (int i = 0; i < iNumOfSegments; i++) {
             Point fixedP = pointInBox(r, iBox);
             Point variableP = pointInBox(r, iBox);
 
-            Segment shortest = findShortest (fixedP, variableP, iBox);
+            Segment shortestS = findShortest (fixedP, variableP, iBox);
 
-            if (iBox.ifSegmInside(shortest)) {
-                segments.add(shortest);
+            if (iBox.ifSegmInside(shortestS)) {
+                segments.add(shortestS);
             } else {
-                Segment[] split = fitBySplit(shortest, iBox);
+
+                Segment[] split = fitBySplit(shortestS, iBox);
                 for (Segment s : split) {
                     segments.add(s);
                 }
@@ -76,19 +78,29 @@ public class Collisions {
         Segment[] sArray = new Segment[2]; // magic number?
 
         if (s.getP1().x > iBox.getPMax().x || s.getP1().x < iBox.getPMin().x) {
-
-            Point pMax = findMaxPoint(s, "x"); // magic string?
-            Point pMin = (s.getP0() == pMax ? s.getP1() : s.getP0());
-
-            sArray[0] = new Segment(pMax, new Point(computeX(s, iBox.getPMax().y), iBox.getPMax().y));
-            sArray[1] = new Segment(pMin, new Point(computeX(s, iBox.getPMin().y), iBox.getPMin().y));
+            if (s.getP0().x >= iBox.boxWidth()/2) {
+                Point variable = new Point(s.getP1().x - iBox.boxWidth(), s.getP1().y);
+                float yNewPoints = computeY(s, iBox.getPMax().x);
+                sArray[0] = new Segment(s.getP0(), new Point(iBox.getPMax().x, yNewPoints));
+                sArray[1] = new Segment(variable, new Point(iBox.getPMin().x, yNewPoints));
+            } else {
+                Point variable = new Point(s.getP1().x + iBox.boxWidth(), s.getP1().y);
+                float yNewPoints = computeY(s, iBox.getPMin().x);
+                sArray[0] = new Segment(s.getP0(), new Point(iBox.getPMin().x, yNewPoints));
+                sArray[1] = new Segment(variable, new Point(iBox.getPMax().x, yNewPoints));
+            }
         } else {
-            float yMid = (s.getP0().y + s.getP1().y)/2;
-            Point pMax = findMaxPoint(s, "y"); // magic string?
-            Point pMin = (s.getP0() == pMax ? s.getP1() : s.getP0());
-
-            sArray[0] = new Segment(pMax, new Point(iBox.getPMax().x, computeY(s, iBox.getPMax().x)));
-            sArray[1] = new Segment(pMin, new Point(iBox.getPMin().x, computeY(s, iBox.getPMin().x)));
+            if (s.getP0().y >= iBox.boxHeight()/2) {
+                Point variable = new Point(s.getP1().x,s.getP1().y - iBox.boxHeight());
+                float xNewPoints = computeX(s, iBox.getPMax().y);
+                sArray[0] = new Segment(s.getP0(), new Point(xNewPoints, iBox.getPMax().y));
+                sArray[1] = new Segment(variable, new Point(xNewPoints, iBox.getPMin().y));
+            } else {
+                Point variable = new Point(s.getP1().x,s.getP1().y + iBox.boxHeight());
+                float xNewPoints = computeX(s, iBox.getPMin().y);
+                sArray[0] = new Segment(s.getP0(), new Point(xNewPoints, iBox.getPMin().y));
+                sArray[1] = new Segment(variable, new Point(xNewPoints, iBox.getPMax().y));
+            }
         }
         return sArray;
     }
@@ -98,17 +110,6 @@ public class Collisions {
     }
     private static float computeY(Segment s, float x) {
         return - (s.getC() + s.getA() * x) / s.getB();
-    }
-
-    private static Point findMaxPoint (Segment s, String str) { //stupid decision "str"
-        Point pMax = s.getP1();
-        if (str.equals("x")) {
-            if (s.getP0().x >= s.getP1().x) {pMax = s.getP0();}
-        }
-        if (str.equals("y")) {
-            if (s.getP0().y >= s.getP1().y) {pMax = s.getP0();}
-        }
-        return pMax;
     }
 
     private static Segment findShortest (Point iFixed, Point iVariable, Box iBox) {

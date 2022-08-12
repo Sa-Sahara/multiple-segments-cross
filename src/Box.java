@@ -26,4 +26,12 @@ public class Box {
     public Point getPMax() {
         return new Point(pMax);
     }
+
+    public float boxHeight () {
+        return (this.getPMax().y - this.getPMin().y);
+    }
+
+    public float boxWidth () {
+        return (this.getPMax().x - this.getPMin().x);
+    }
 }
