@@ -17,7 +17,7 @@ public class Segment {
         setP(iP0, iP1);
     }
 
-    //public Segment(Segment other) {this(other.getP0(), other.getP1());} was not used
+    public Segment(Segment other) {this(other.getP0(), other.getP1());}
 
     public void setP(Point iP0, Point iP1) {
         this.mP0 = new Point(iP0);

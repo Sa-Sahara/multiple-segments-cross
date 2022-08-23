@@ -3,24 +3,27 @@ import java.util.ArrayList;
 public final class CrossSearch {
     private CrossMode mMode;
 
-    public CrossSearch (CrossMode iMode) {
+    public CrossSearch(CrossMode iMode) {
         this.mMode = iMode;
     }
 
     public void setMode(CrossMode iMode) {
         this.mMode = iMode;
     }
+
     CrossMode mode() {
         return mMode;
     }
 
     public int numOfCrosses(ArrayList<Segment> iSegments) {
         int numOfCrosses = 0;
-        for (int i = 0; i < iSegments.size(); i++) {
-            for (int j = i + 1; j < iSegments.size(); j++) {
-                Cross cross = crossSearch(iSegments.get(i), iSegments.get(j));
-                if (cross.ok) {
-                    numOfCrosses++;
+        if (iSegments.size() >= 2) {
+            for (int i = 0; i < iSegments.size(); i++) {
+                for (int j = i + 1; j < iSegments.size(); j++) {
+                    Cross cross = crossSearch(iSegments.get(i), iSegments.get(j));
+                    if (cross.ok) {
+                        numOfCrosses++;
+                    }
                 }
             }
         }
@@ -28,7 +31,7 @@ public final class CrossSearch {
     }
 
 
-    private Cross crossSearch(Segment iSegm1, Segment iSegm2) {
+    public Cross crossSearch(Segment iSegm1, Segment iSegm2) {
         Cross cross = new Cross(new Point(0, 0), false);
         Point tmpP = findCrossPoint(iSegm1, iSegm2);
         if (Float.isFinite(tmpP.x) && Float.isFinite(tmpP.y)) {
@@ -48,27 +51,31 @@ public final class CrossSearch {
         }
         return cross;
     }
+
     private boolean isSamePoint(Segment iSegment) {
         return iSegment.getP1().equals(iSegment.getP0());
     }
 
-    private Point findCrossPoint (Segment iSegm1, Segment iSegm2){
+    private Point findCrossPoint(Segment iSegm1, Segment iSegm2) {
         float denominator = iSegm1.getA() * iSegm2.getB() - iSegm2.getA() * iSegm1.getB();
         float y = (iSegm1.getC() * iSegm2.getA() - iSegm2.getC() * iSegm1.getA()) /
                 denominator;
         float x = (iSegm1.getB() * iSegm2.getC() - iSegm2.getB() * iSegm1.getC()) /
                 denominator;
-        return new Point(x,y);
+        return new Point(x, y);
     }
+
     private boolean insideSegment(Point center, Segment iSegment) {
         return betweenPoints(center, iSegment.getP0(), iSegment.getP1());
     }
-    private boolean betweenPoints (Point iCenter, Point iP0, Point iP1){
-        return iCenter.x >= Math.min(iP0.x, iP1.x) &&
-                iCenter.x <= Math.max(iP0.x, iP1.x) &&
-                iCenter.y >= Math.min(iP0.y, iP1.y) &&
-                iCenter.y <= Math.max(iP0.y, iP1.y);
+
+    private boolean betweenPoints(Point iCenter, Point iP0, Point iP1) {
+        return iCenter.x >= Math.min(iP0.x, iP1.x) - Collisions.EPSILON &&
+                iCenter.x <= Math.max(iP0.x, iP1.x) + Collisions.EPSILON &&
+                iCenter.y >= Math.min(iP0.y, iP1.y) - Collisions.EPSILON &&
+                iCenter.y <= Math.max(iP0.y, iP1.y) + Collisions.EPSILON;
     }
+
     private Cross caseMultipleCross(Segment iSegm1, Segment iSegm2) {
         Point p = new Point(0, 0);
         boolean bool = false;
@@ -86,6 +93,7 @@ public final class CrossSearch {
         }
         return new Cross(p, bool);
     }
+
     private Cross caseSingleCross(Segment iSegm1, Segment iSegm2) {
         Point p = new Point(0, 0);
         boolean bool = false;

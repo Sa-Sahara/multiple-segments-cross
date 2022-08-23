@@ -16,7 +16,7 @@ public class Box {
                 p.y <= this.getPMax().y);
     }
 
-    public boolean ifSegmInside (Segment s) {
+    public boolean ifSegmentInside(Segment s) {
         return (this.ifPointInside(s.getP0()) && this.ifPointInside(s.getP1()));
     }
 
