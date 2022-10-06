@@ -33,3 +33,5 @@ packages/
 #by Idea
 .idea/*
 *.class
+/Multiple segments cross.iml
+/Test/CollisionsTest.java

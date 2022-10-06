@@ -44,10 +44,12 @@ public class Collisions {
 
             Segment shortestS = findShortest(fixedP, variableP, iBox);
 
-            if (iBox.ifSegmentInside(shortestS)) {
+            if (iBox.isSegmentInside(shortestS)) {
                 segments.add(shortestS);
-            } else if ((shortestS.getP1().x >= iBox.getPMin().x && shortestS.getP1().x <= iBox.getPMax().x) ^
-                    (shortestS.getP1().y >= iBox.getPMin().y && shortestS.getP1().y <= iBox.getPMax().y)) {
+            } else if ((Float.compare(shortestS.getP1().x, iBox.minX()) >= 0 &&
+                    Float.compare(shortestS.getP1().x, iBox.maxX()) <= 0) ^
+                    (Float.compare(shortestS.getP1().y, iBox.minY()) >= 0 &&
+                    Float.compare(shortestS.getP1().y, iBox.maxY()) <= 0)) {
                 tmp = transformTo2Segments(shortestS, iBox);
                 for (Segment s : tmp) {
                     segments.add(new Segment(s));
@@ -74,63 +76,25 @@ public class Collisions {
 
     private static ArrayList<Segment> transformTo2Segments(Segment iShortest, Box iBox) {
         ArrayList<Segment> resultArray = new ArrayList<>();
-        Point cross = crossFor2SegmentsSlit(iShortest, iBox);
+        Point cross = new CrossSearch(CrossMode.SINGLE).crossSearch(iShortest,iBox).p;
 
-        if (Math.abs(cross.x - iBox.getPMin().x) < EPSILON) {
-            resultArray.add(new Segment(iShortest.getP0(), cross));
+        resultArray.add(new Segment(iShortest.getP0(), cross));
+        if (Math.abs(cross.x - iBox.minX()) < EPSILON) {
             resultArray.add(new Segment(new Point(cross.x + iBox.boxWidth(), cross.y),
                     new Point(iShortest.getP1().x + iBox.boxWidth(), iShortest.getP1().y)));
             /* swap P1 & P0 because P1 of resulArray[1] became fix-position-point inside box
             * in case of split for 3 segments*/
-
-        } else if (Math.abs(cross.x - iBox.getPMax().x) < EPSILON) {
-            resultArray.add(new Segment(iShortest.getP0(), cross));
+        } else if (Math.abs(cross.x - iBox.maxX()) < EPSILON) {
             resultArray.add(new Segment(new Point(cross.x - iBox.boxWidth(), cross.y),
                     new Point(iShortest.getP1().x - iBox.boxWidth(), iShortest.getP1().y)));
-        } else if (Math.abs(cross.y - iBox.getPMin().y) < EPSILON) {
-            resultArray.add(new Segment(iShortest.getP0(), cross));
+        } else if (Math.abs(cross.y - iBox.minY()) < EPSILON) {
             resultArray.add(new Segment(new Point(cross.x, cross.y + iBox.boxHeight()),
                     new Point(iShortest.getP1().x, iShortest.getP1().y + iBox.boxHeight())));
-        } else if (Math.abs(cross.y - iBox.getPMax().y) < EPSILON) {
-            resultArray.add(new Segment(iShortest.getP0(), cross));
+        } else if (Math.abs(cross.y - iBox.maxY()) < EPSILON) {
             resultArray.add(new Segment(new Point(cross.x, cross.y - iBox.boxHeight()),
                     new Point(iShortest.getP1().x, iShortest.getP1().y - iBox.boxHeight())));
         }
         return resultArray;
-    }
-
-    private static Point crossFor2SegmentsSlit(Segment iShortest, Box iBox) {
-        Point crossPoint = new Point(0, 0);
-        CrossMode mMode = CrossMode.SINGLE;
-        CrossSearch search = new CrossSearch(mMode);
-
-        Segment minX = new Segment(
-                new Point(iBox.getPMin().x, iBox.getPMax().y),
-                new Point(iBox.getPMin().x, iBox.getPMin().y));
-        Segment maxX = new Segment(
-                new Point(iBox.getPMax().x, iBox.getPMax().y),
-                new Point(iBox.getPMax().x, iBox.getPMin().y));
-        Segment maxY = new Segment(
-                new Point(iBox.getPMin().x, iBox.getPMax().y),
-                new Point(iBox.getPMax().x, iBox.getPMax().y));
-        Segment minY = new Segment(
-                new Point(iBox.getPMin().x, iBox.getPMin().y),
-                new Point(iBox.getPMax().x, iBox.getPMin().y));
-        Cross crossMaxX = search.crossSearch(iShortest, maxX);
-        Cross crossMinX = search.crossSearch(iShortest, minX);
-        Cross crossMaxY = search.crossSearch(iShortest, maxY);
-        Cross crossMinY = search.crossSearch(iShortest, minY);
-
-        if (crossMaxX.ok) {
-            crossPoint = crossMaxX.p;
-        } else if (crossMinX.ok) {
-            crossPoint = crossMinX.p;
-        } else if (crossMaxY.ok) {
-            crossPoint = crossMaxY.p;
-        } else if (crossMinY.ok) {
-            crossPoint = crossMinY.p;
-        }
-        return crossPoint;
     }
 
     private static Segment findShortest(Point iFixed, Point iVariable, Box iBox) {
@@ -154,8 +118,8 @@ public class Collisions {
     }
 
     private static Point pointInBox(Random r, Box iBox) {
-        float x = r.nextFloat() * (iBox.getPMax().x - iBox.getPMin().x) + iBox.getPMin().x;
-        float y = r.nextFloat() * (iBox.getPMax().y - iBox.getPMin().y) + iBox.getPMin().y;
+        float x = r.nextFloat() * (iBox.maxX() - iBox.minX()) + iBox.minX();
+        float y = r.nextFloat() * (iBox.maxY() - iBox.minY()) + iBox.minY();
         return new Point(x, y);
     }
 }

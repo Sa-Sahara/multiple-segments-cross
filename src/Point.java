@@ -1,4 +1,5 @@
 public class Point {
+    public static final float DEFAULT_COORDINATE = 0.f;
     float x;
     float y;
 
@@ -10,5 +11,13 @@ public class Point {
     Point (Point other) {
         this.x = other.x;
         this.y = other.y;
+    }
+
+    @Override
+    public boolean equals(Object o){
+       if (o.getClass() != this.getClass())
+           return false;
+       else return Float.compare(x, ((Point)o).x) == 0 &&
+               Float.compare(y, ((Point)o).y) == 0;
     }
 }
