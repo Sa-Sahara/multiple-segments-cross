@@ -1,7 +1,6 @@
 public class Box {
-    private static final int BOX_SIDES = 4;
-    final private Point pMin;
-    final private Point pMax;
+    private Point pMin;
+    private Point pMax;
 
     public Box (float iX1, float iY1, float iX2, float iY2) {
         pMin = new Point(Math.min(iX1, iX2), Math.min(iY1, iY2));
@@ -18,14 +17,14 @@ public class Box {
     }
 
     public boolean isPointInside(Point p) {
-        return Float.compare(p.x, this.getPMin().x) >= 0 &&
-                Float.compare(p.x, this.getPMax().x) <= 0 &&
-                Float.compare(p.y, this.getPMin().y) >= 0 &&
-                Float.compare(p.y, this.getPMax().y) <= 0;
+        return p.x >= getPMin().x
+                && p.x <= getPMax().x
+                && p.y >= getPMin().y
+                && p.y <= getPMax().y;
     }
 
     public boolean isSegmentInside(Segment s) {
-        return (this.isPointInside(s.getP0()) && this.isPointInside(s.getP1()));
+        return (isPointInside(s.getP0()) && isPointInside(s.getP1()));
     }
 
     public Point getPMin() {
@@ -35,11 +34,11 @@ public class Box {
         return new Point(pMax);
     }
 
-    public float boxHeight () {
-        return (this.getPMax().y - this.getPMin().y);
+    public float height() {
+        return (getPMax().y - getPMin().y);
     }
-    public float boxWidth () {
-        return (this.getPMax().x - this.getPMin().x);
+    public float width() {
+        return (getPMax().x - getPMin().x);
     }
 
     public float minX(){
@@ -57,7 +56,7 @@ public class Box {
 
 
     public Segment[] createBoxSides(){
-        Segment[] segments = new Segment[BOX_SIDES];
+        Segment[] segments = new Segment[4];
         Point minXMaxY = new Point(minX(),maxY());
         Point maxXMinY = new Point(maxX(),minY());
         segments [0] = new Segment(pMin, minXMaxY);

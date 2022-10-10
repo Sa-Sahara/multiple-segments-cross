@@ -2,16 +2,10 @@ public class Segment {
     public static final int POINTS_IN_SEGMENT = 2;
     private Point mP0;
     private Point mP1;
-    private Line line;
+    private Line mLine;
 
-    public static float length(Segment iSegment) {
-        return distance2Points(iSegment.mP0, iSegment.mP1);
-    }
-
-    private static float distance2Points(Point p0, Point p1) {
-        return (float) Math.sqrt(
-                Math.pow(p0.x - p1.x, 2) +
-                Math.pow(p0.y - p1.y, 2));
+    public float length() {
+        return mP0.dist(mP1);
     }
 
     public Segment(Point iP0, Point iP1) {
@@ -23,9 +17,9 @@ public class Segment {
     }
 
     public void setP(Point iP0, Point iP1) {
-        this.mP0 = new Point(iP0);
-        this.mP1 = new Point(iP1);
-        this.line = new Line(iP0, iP1);
+        mP0 = new Point(iP0);
+        mP1 = new Point(iP1);
+        mLine = new Line(iP0, iP1);
     }
 
     public Point getP0() {
@@ -45,6 +39,6 @@ public class Segment {
     }
 
     public Line getLine() {
-        return new Line(line);
+        return new Line(mLine);
     }
 }

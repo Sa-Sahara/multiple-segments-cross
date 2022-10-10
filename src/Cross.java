@@ -1,14 +1,14 @@
 public class Cross {
-    Point p;
-    boolean ok;
+    Point mP;
+    boolean mOk;
 
     Cross(){
-        this.p = new Point(Point.DEFAULT_COORDINATE, Point.DEFAULT_COORDINATE);
-        ok = false;
+        mP = new Point();
+        mOk = false;
     }
 
     Cross (Point iP, boolean iOk) {
-        this.p = new Point(iP);
-        this.ok = iOk;
+        mP = new Point(iP);
+        mOk = iOk;
     }
 }

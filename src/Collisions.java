@@ -39,17 +39,12 @@ public class Collisions {
         for (int i = 0; i < iNumOfSegments; i++) {
             Point fixedP = pointInBox(r, iBox);
             Point variableP = pointInBox(r, iBox);
-//            Point fixedP = new Point(-460, -40);
-//            Point variableP = new Point(480, 39);
-
             Segment shortestS = findShortest(fixedP, variableP, iBox);
 
             if (iBox.isSegmentInside(shortestS)) {
                 segments.add(shortestS);
-            } else if ((Float.compare(shortestS.getP1().x, iBox.minX()) >= 0 &&
-                    Float.compare(shortestS.getP1().x, iBox.maxX()) <= 0) ^
-                    (Float.compare(shortestS.getP1().y, iBox.minY()) >= 0 &&
-                    Float.compare(shortestS.getP1().y, iBox.maxY()) <= 0)) {
+            } else if ((shortestS.getP1().x >= iBox.minX() && shortestS.getP1().x <= iBox.maxX())
+                ^ (shortestS.getP1().y >= iBox.minY() && shortestS.getP1().y <= iBox.maxY())) {
                 tmp = transformTo2Segments(shortestS, iBox);
                 for (Segment s : tmp) {
                     segments.add(new Segment(s));
@@ -76,23 +71,26 @@ public class Collisions {
 
     private static ArrayList<Segment> transformTo2Segments(Segment iShortest, Box iBox) {
         ArrayList<Segment> resultArray = new ArrayList<>();
-        Point cross = new CrossSearch(CrossMode.SINGLE).crossSearch(iShortest,iBox).p;
+        Point cross = new CrossSearch(CrossMode.SINGLE).crossSearch(iShortest,iBox).mP;
 
         resultArray.add(new Segment(iShortest.getP0(), cross));
+
         if (Math.abs(cross.x - iBox.minX()) < EPSILON) {
-            resultArray.add(new Segment(new Point(cross.x + iBox.boxWidth(), cross.y),
-                    new Point(iShortest.getP1().x + iBox.boxWidth(), iShortest.getP1().y)));
-            /* swap P1 & P0 because P1 of resulArray[1] became fix-position-point inside box
-            * in case of split for 3 segments*/
+            resultArray.add(new Segment(new Point(cross.x + iBox.width(), cross.y),
+                    new Point(iShortest.getP1().x + iBox.width(), iShortest.getP1().y)));
+            /*
+            * swap P1 & P0 because P1 of resulArray[1] became fix-position-point inside box
+            * in case of split for 3 segments
+            */
         } else if (Math.abs(cross.x - iBox.maxX()) < EPSILON) {
-            resultArray.add(new Segment(new Point(cross.x - iBox.boxWidth(), cross.y),
-                    new Point(iShortest.getP1().x - iBox.boxWidth(), iShortest.getP1().y)));
+            resultArray.add(new Segment(new Point(cross.x - iBox.width(), cross.y),
+                    new Point(iShortest.getP1().x - iBox.width(), iShortest.getP1().y)));
         } else if (Math.abs(cross.y - iBox.minY()) < EPSILON) {
-            resultArray.add(new Segment(new Point(cross.x, cross.y + iBox.boxHeight()),
-                    new Point(iShortest.getP1().x, iShortest.getP1().y + iBox.boxHeight())));
+            resultArray.add(new Segment(new Point(cross.x, cross.y + iBox.height()),
+                    new Point(iShortest.getP1().x, iShortest.getP1().y + iBox.height())));
         } else if (Math.abs(cross.y - iBox.maxY()) < EPSILON) {
-            resultArray.add(new Segment(new Point(cross.x, cross.y - iBox.boxHeight()),
-                    new Point(iShortest.getP1().x, iShortest.getP1().y - iBox.boxHeight())));
+            resultArray.add(new Segment(new Point(cross.x, cross.y - iBox.height()),
+                    new Point(iShortest.getP1().x, iShortest.getP1().y - iBox.height())));
         }
         return resultArray;
     }
@@ -100,8 +98,8 @@ public class Collisions {
     private static Segment findShortest(Point iFixed, Point iVariable, Box iBox) {
         ArrayList<Segment> projections = new ArrayList<>();
         Segment shortest = new Segment(iFixed, iVariable);
-        float width = iBox.boxWidth();
-        float height = iBox.boxHeight();
+        float width = iBox.width();
+        float height = iBox.height();
 
         for (float i = -width; i <= width; i += width) {
             for (float j = -height; j <= height; j += height) {
@@ -110,7 +108,7 @@ public class Collisions {
         }
 
         for (Segment p : projections) {
-            if (Segment.length(p) < Segment.length(shortest)) {
+            if (p.length() < shortest.length()) {
                 shortest = p;
             }
         }

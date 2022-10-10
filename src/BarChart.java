@@ -14,7 +14,7 @@ public class BarChart extends JFXPanel {
     public BarChart(ArrayList<Segment> iSegments) {
         int counter = 1;
         for (Segment s : iSegments) {
-            mLength.add(Segment.length(s));
+            mLength.add(s.length());
             mNames.add("Segment" + counter);
             counter++;
         }
@@ -22,11 +22,8 @@ public class BarChart extends JFXPanel {
         //Defining the axes
         CategoryAxis xAxisInvisible = new CategoryAxis();
         xAxisInvisible.setLabel("length, pc");
-        //xAxisInvisible.setTickMarkVisible(false);
         xAxisInvisible.setTickLabelRotation(90);
         xAxisInvisible.setVisible(true);
-        CategoryAxis axis = new CategoryAxis();
-
 
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("quantity");

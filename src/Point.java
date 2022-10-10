@@ -1,23 +1,30 @@
 public class Point {
-    public static final float DEFAULT_COORDINATE = 0.f;
-    float x;
-    float y;
+    float x = 0.f;
+    float y = 0.f;
 
-    Point (float iX, float iY) {
-        this.x = iX;
-        this.y = iY;
+    Point() {
     }
 
-    Point (Point other) {
-        this.x = other.x;
-        this.y = other.y;
+    Point(float iX, float iY) {
+        x = iX;
+        y = iY;
+    }
+
+    Point(Point other) {
+        x = other.x;
+        y = other.y;
+    }
+
+    public float dist(Point other) {
+        return (float) Math.sqrt(
+                Math.pow(x - other.x, 2) +
+                        Math.pow(y - other.y, 2));
     }
 
     @Override
-    public boolean equals(Object o){
-       if (o.getClass() != this.getClass())
-           return false;
-       else return Float.compare(x, ((Point)o).x) == 0 &&
-               Float.compare(y, ((Point)o).y) == 0;
+    public boolean equals(Object o) {
+        if (o.getClass() != this.getClass())
+            return false;
+        else return x == ((Point)o).x;
     }
 }

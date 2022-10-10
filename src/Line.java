@@ -1,5 +1,5 @@
 public class Line {
-    private float mA, mB, mC;
+    float mA, mB, mC;
 
     public Line(Point p0, Point p1) {
         mA = -(p1.y - p0.y);
@@ -8,24 +8,12 @@ public class Line {
     }
 
     public Line(Line other){
-        this.mA = other.mA;
-        this.mB = other.mB;
-        this.mC = other.mC;
+        mA = other.mA;
+        mB = other.mB;
+        mC = other.mC;
     }
 
-    public float substitutePoint(Point p) {
+    public float distToPoint(Point p) {
         return mA * p.x + mB * p.y + mC;
-    }
-
-    public float getA() {
-        return mA;
-    }
-
-    public float getB() {
-        return mB;
-    }
-
-    public float getC() {
-        return mC;
     }
 }
